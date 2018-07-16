@@ -67,10 +67,19 @@ for i in range(len(jle.seasons)):
     units=eobs_precip.variables['rr'].units
     X,Y=np.meshgrid(ds1.variables['longitude'][:],ds1.variables['latitude'][:])
 
-    eobs_sm=np.concatenate((eobs_mm1,eobs_mm2,eobs_mm3)).mean(axis=0)
 
-    eobs_mask=np.logical_or(eobs_mm1.mean(axis=0).mask,eobs_mm2.mean(axis=0).mask,eobs_mm3.mean(axis=0))
-    eobs_mask=np.logical_or(eobs_mask,eobs_sm<0)
+    f_value=eobs_precip.variables['rr']._FillValue
+    eobs_sm=np.concatenate((eobs_mm1,eobs_mm2,eobs_mm3))
+
+    eobs_mask=(eobs_sm==f_value)
+    eobs_mask=eobs_mask.sum(axis=0).astype('bool')
+    eobs_sm=eobs_sm.mean(axis=0)
+    
+
+    # eobs_sm=np.concatenate((eobs_mm1,eobs_mm2,eobs_mm3)).mean(axis=0)
+
+    # eobs_mask=np.logical_or(eobs_mm1.mean(axis=0).mask,eobs_mm2.mean(axis=0).mask,eobs_mm3.mean(axis=0))
+    # eobs_mask=np.logical_or(eobs_mask,eobs_sm<0)
     total_mask=np.logical_or(eobs_mask,domain_mask)
     
     
@@ -128,7 +137,14 @@ for i in range(len(jle.seasons)):
     eobs_mm2=eobs_tmean.variables['tg'][s2:e2]+273.15
     eobs_mm3=eobs_tmean.variables['tg'][s3:e3]+273.15
 
-    eobs_sm=np.concatenate((eobs_mm1,eobs_mm2,eobs_mm3)).mean(axis=0)
+    # eobs_sm=np.concatenate((eobs_mm1,eobs_mm2,eobs_mm3)).mean(axis=0)
+    f_value=eobs_tmean.variables['tg']._FillValue
+    eobs_sm=np.concatenate((eobs_mm1,eobs_mm2,eobs_mm3))
+
+    eobs_mask=(eobs_sm==f_value)
+    eobs_mask=eobs_mask.sum(axis=0).astype('bool')
+    eobs_sm=eobs_sm.mean(axis=0)
+    
 
     
     
@@ -138,9 +154,9 @@ for i in range(len(jle.seasons)):
 
 #    eobs_mask=np.logical_or(eobs_mm1.mean(axis=0).mask,eobs_mm2.mean(axis=0).mask,eobs_mm3.mean(axis=0).mask)
 #    eobs_mask=np.logical_or(eobs_mm1.mask.mean(axis=0),eobs_mm2.mask.mean(axis=0),eobs_mm3.mask.mean(axis=0))
-    eobs_mask=np.logical_or(eobs_mm1.mean(axis=0).mask,eobs_mm2.mean(axis=0).mask,eobs_mm3.mean(axis=0))
+    # eobs_mask=np.logical_or(eobs_mm1.mean(axis=0).mask,eobs_mm2.mean(axis=0).mask,eobs_mm3.mean(axis=0))
 
-    eobs_mask=np.logical_or(eobs_mask,eobs_sm<0)
+    # eobs_mask=np.logical_or(eobs_mask,eobs_sm<0)
 #    total_mask=np.logical_or(eobs_mask,domain_mask)
 
 #    eobs_mask=np.copy(eobs_mm1.mask.mean(axis=0)*eobs_mm2.mask.mean(axis=0)*eobs_mm3.mask.mean(axis=0))
