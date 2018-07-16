@@ -1,4 +1,0 @@
-import regrid_run
-import monthly_concatenation.py
-import eobs_evaluation_monthly.py
-import eobs_evaluation_seasons.py

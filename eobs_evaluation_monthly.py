@@ -5,7 +5,8 @@ Created on Thu Jul 12 14:51:47 2018
 
 @author: jvergara
 """
-
+import matplotlib 
+matplotlib.use('Agg')
 import sys
 sys.path.append('/users/jvergara/python_code')
 import Jesuslib_eth as jle
