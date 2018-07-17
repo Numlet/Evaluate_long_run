@@ -56,7 +56,10 @@ for i in range(len(jle.seasons)):
     ds2=Dataset(files_path+'lffd2006%s_%s.nc'%(months[1],jle.month_names[int(months[1])-1]))
     ds3=Dataset(files_path+'lffd2006%s_%s.nc'%(months[2],jle.month_names[int(months[2])-1]))
     
-    domain_mask=ds1.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    if ds.variables['RELHUM_2M'][:].ndim==4:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    else:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0))==0
     
     s1,e1=initial_final_day_index_EOBS(year,months[0])
     s2,e2=initial_final_day_index_EOBS(year,months[1])
@@ -128,7 +131,10 @@ for i in range(len(jle.seasons)):
     ds2=Dataset(files_path+'lffd2006%s_%s.nc'%(months[1],jle.month_names[int(months[1])-1]))
     ds3=Dataset(files_path+'lffd2006%s_%s.nc'%(months[2],jle.month_names[int(months[2])-1]))
     
-    domain_mask=ds1.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    if ds.variables['RELHUM_2M'][:].ndim==4:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    else:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0))==0
     
     s1,e1=initial_final_day_index_EOBS(year,months[0])
     s2,e2=initial_final_day_index_EOBS(year,months[1])
@@ -169,7 +175,12 @@ for i in range(len(jle.seasons)):
     model_mm2=ds2.variables['T_2M'][:]
     model_mm3=ds3.variables['T_2M'][:]
 
-    model_sm=np.concatenate((model_mm1,model_mm2,model_mm3)).mean(axis=(0,1))
+    model_sm=np.concatenate((model_mm1,model_mm2,model_mm3))
+    if model_sm.ndim==4:
+        model_sm=model_sm.mean(axis=(0,1))
+    else:
+        model_sm=model_sm.mean(axis=(0))
+        
     model_sm[total_mask]=np.nan
 
     

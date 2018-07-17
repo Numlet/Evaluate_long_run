@@ -59,7 +59,11 @@ for month in jle.months_number_str:
     
     ds=Dataset(files_path+'lffd2006%s_%s.nc'%(month,jle.month_names[int(month)-1]))
     
-    domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    if ds.variables['RELHUM_2M'][:].ndim==4:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    else:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0))==0
+        
     
     s,e=initial_final_day_index_EOBS(year,month)
     eobs_mm=eobs_precip.variables['rr'][s:e].mean(axis=0)
@@ -105,7 +109,10 @@ for month in jle.months_number_str:
     
     ds=Dataset(files_path+'lffd2006%s_%s.nc'%(month,jle.month_names[int(month)-1]))
     
-    domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    if ds.variables['RELHUM_2M'][:].ndim==4:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    else:
+        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0))==0
     
     s,e=initial_final_day_index_EOBS(year,month)
     eobs_mm=eobs_tmean.variables['tg'][s:e].mean(axis=0)+273.15
@@ -114,8 +121,10 @@ for month in jle.months_number_str:
     eobs_mask=np.copy(eobs_mm.mask)
     total_mask=np.logical_or(eobs_mask,domain_mask)
     eobs_mm[total_mask]=np.nan
-    
-    model_mm=ds.variables['T_2M'][:].mean(axis=(0,1))
+    if ds.variables['T_2M'].ndim==3:
+        model_mm=ds.variables['T_2M'][:].mean(axis=(0))
+    else:
+        model_mm=ds.variables['T_2M'][:].mean(axis=(0,1))
     model_mm[total_mask]=np.nan
     
     plt.figure(figsize=(20,20))
