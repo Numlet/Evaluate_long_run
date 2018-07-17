@@ -46,7 +46,6 @@ eobs=Dataset('/store/c2sm/pr04/jvergara/EOBS/rr_0.25deg_reg_v17.0.nc')
 
     
 #%%
-levels=np.linspace(0,9,10)
 
 for month in jle.months_number_str:
     print (month)
@@ -56,7 +55,8 @@ for month in jle.months_number_str:
 # =============================================================================
     plt.figure(figsize=(20,20))
     print('PRECIPITATION EVALUATION')
-    
+    levels=np.linspace(0,9,10)
+
     ds=Dataset(files_path+'lffd2006%s_%s.nc'%(month,jle.month_names[int(month)-1]))
     
     if ds.variables['RELHUM_2M'][:].ndim==4:
