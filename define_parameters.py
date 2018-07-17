@@ -10,7 +10,7 @@ pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 run_path='/project/pr04/davidle/results_clim/lm_c/'
 run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/0.11_DEEP/lm_c/'
 folder_in_path='1h/'
-output_path='/store/c2sm/pr04/jvergara/EOBS_CONV_ON_OFF/0.11/'
+output_path='/store/c2sm/pr04/jvergara/EOBS_CONV_ON_OFF/0.11_DEEP/'
 jle.Create_folder(output_path)
 
 native_grid_file=pspc_data_folder+'CLM_lm_c_grid.txt'
