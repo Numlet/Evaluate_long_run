@@ -136,7 +136,7 @@ for month in jle.months_number_str:
     dif_levels=np.linspace(-5,5,11)
     dif=model_mm-eobs_mm
     plt.subplot(223)
-    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu_r,cb_label=units,new_fig=False,cb_format='%1.1f')
     data=dif.flatten()
     data=data[~np.isnan(data)]
     plt.subplot(224)
