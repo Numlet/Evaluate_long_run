@@ -24,11 +24,10 @@ from pympler import summary
 import pickle
 import scipy
 
-from define_parameters import pspc_data_folder, output_path
+from define_parameters import pspc_data_folder, output_path, year
 
 
 os.chdir(output_path)
-year='2006'
 
 
 
