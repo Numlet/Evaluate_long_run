@@ -84,7 +84,8 @@ while True:
             file_output_with_path=output+file_name_output
             out_files[file_output_with_path]=file
 #            print(output+file_name_output)
-            p = multiprocessing.Process(target=Regrid, args=(file,file_output_with_path))
+            keywords={'jump_past_files':1}
+            p = multiprocessing.Process(target=Regrid, args=(file,file_output_with_path),kwargs=keywords)
             print (file,p)
             jobs.append(p)
             p.start()
