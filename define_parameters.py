@@ -7,10 +7,13 @@ from dateutil.relativedelta import relativedelta
 
 pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 
+name='test'
+
+
 run_path='/project/pr04/davidle/results_clim/lm_c/'
 run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/0.11_DEEP/lm_c/'
 folder_in_path='1h/'
-output_path='/store/c2sm/pr04/jvergara/EOBS_CONV_ON_OFF/0.11_DEEP/'
+output_path='/store/c2sm/pr04/jvergara/EOBS_CONV_ON_OFF/'+name+'/'
 jle.Create_folder(output_path)
 
 native_grid_file=pspc_data_folder+'CLM_lm_c_grid.txt'
@@ -20,7 +23,7 @@ target_grid_file=pspc_data_folder+'e-obs_rr_9_grid.txt'
 
 year='2006'
 
-plots_folder='/users/jvergara/evaluation_eobs/0.11_DEEP/'
+plots_folder='/users/jvergara/evaluation_eobs/'+name+'/'
 
 jle.Create_folder(plots_folder)
 
