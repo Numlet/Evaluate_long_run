@@ -8,8 +8,8 @@ Created on Thu Jul 12 14:51:47 2018
 
 import sys
 sys.path.append('/users/jvergara/python_code')
-#import matplotlib
-#matplotlib.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 import Jesuslib_eth as jle
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,7 +27,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 
-from define_parameters import pspc_data_folder,year, plots_folder, initial_final_day_index_EOBS
+from define_parameters import pspc_data_folder,year, plots_folder, initial_final_day_index_EOBS, name
 from define_parameters import output_path as files_path
 
 
@@ -52,9 +52,9 @@ for i in range(len(jle.seasons)):
     print('PRECIPITATION EVALUATION')
     levels=np.linspace(0,9,10)
     
-    ds1=Dataset(files_path+'lffd2006%s_%s.nc'%(months[0],jle.month_names[int(months[0])-1]))
-    ds2=Dataset(files_path+'lffd2006%s_%s.nc'%(months[1],jle.month_names[int(months[1])-1]))
-    ds3=Dataset(files_path+'lffd2006%s_%s.nc'%(months[2],jle.month_names[int(months[2])-1]))
+    ds1=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[0],jle.month_names[int(months[0])-1]))
+    ds2=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[1],jle.month_names[int(months[1])-1]))
+    ds3=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[2],jle.month_names[int(months[2])-1]))
     
     if ds.variables['RELHUM_2M'][:].ndim==4:
         domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
@@ -110,7 +110,7 @@ for i in range(len(jle.seasons)):
     plt.hist(data,bins=200)
     plt.title('Diff histogram. Mean_bias=%1.2f %s'%(data.mean(),units))
     
-    plt.savefig(plots_folder+'Precipitation_evaluation_%s.png'%jle.seasons[i])
+    plt.savefig(plots_folder+name+'_precipitation_evaluation_%s.png'%jle.seasons[i])
     
 #%%
     
@@ -127,9 +127,9 @@ for i in range(len(jle.seasons)):
 
     plt.figure(figsize=(20,20))
     
-    ds1=Dataset(files_path+'lffd2006%s_%s.nc'%(months[0],jle.month_names[int(months[0])-1]))
-    ds2=Dataset(files_path+'lffd2006%s_%s.nc'%(months[1],jle.month_names[int(months[1])-1]))
-    ds3=Dataset(files_path+'lffd2006%s_%s.nc'%(months[2],jle.month_names[int(months[2])-1]))
+    ds1=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[0],jle.month_names[int(months[0])-1]))
+    ds2=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[1],jle.month_names[int(months[1])-1]))
+    ds3=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[2],jle.month_names[int(months[2])-1]))
     
     if ds.variables['RELHUM_2M'][:].ndim==4:
         domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
@@ -204,4 +204,4 @@ for i in range(len(jle.seasons)):
     plt.hist(data,bins=200)
     plt.title('Diff histogram. Mean_bias=%1.2f %s'%(data.mean(),units))
 #    plt.yscale('log')
-    plt.savefig(plots_folder+'Temperature_evaluation_%s.png'%jle.seasons[i])
+    plt.savefig(plots_folder+name+'_temperature_evaluation_%s.png'%jle.seasons[i])
