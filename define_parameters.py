@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 
 pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 
-name='test'
+name='0.11_DEEP'
 
 
 run_path='/project/pr04/davidle/results_clim/lm_c/'

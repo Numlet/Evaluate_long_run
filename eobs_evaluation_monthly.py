@@ -26,7 +26,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 
-from define_parameters import pspc_data_folder,year, plots_folder, initial_final_day_index_EOBS
+from define_parameters import pspc_data_folder,year, plots_folder, initial_final_day_index_EOBS, name
 from define_parameters import output_path as files_path
 
 
@@ -91,7 +91,7 @@ for month in jle.months_number_str:
     plt.hist(data,bins=200)
     plt.title('Diff histogram. Mean_bias=%1.2f %s'%(data.mean(),units))
 #    plt.yscale('log')
-    plt.savefig(plots_folder+'Precipitation_evaluation_%s.png'%jle.month_names[int(month)-1])
+    plt.savefig(plots_folder+name+'_precipitation_evaluation_%s.png'%jle.month_names[int(month)-1])
     
     
     
@@ -142,4 +142,4 @@ for month in jle.months_number_str:
     plt.subplot(224)
     plt.hist(data,bins=200)
     plt.title('Diff histogram. Mean_bias=%1.2f %s'%(data.mean(),units))
-    plt.savefig(plots_folder+'Temperature_evaluation_%s.png'%jle.month_names[int(month)-1])
+    plt.savefig(plots_folder+name+'_temperature_evaluation_%s.png'%jle.month_names[int(month)-1])

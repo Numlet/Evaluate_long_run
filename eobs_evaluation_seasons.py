@@ -56,10 +56,10 @@ for i in range(len(jle.seasons)):
     ds2=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[1],jle.month_names[int(months[1])-1]))
     ds3=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[2],jle.month_names[int(months[2])-1]))
     
-    if ds.variables['RELHUM_2M'][:].ndim==4:
-        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    if ds1.variables['RELHUM_2M'][:].ndim==4:
+        domain_mask=ds1.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
     else:
-        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0))==0
+        domain_mask=ds1.variables['RELHUM_2M'][:].mean(axis=(0))==0
     
     s1,e1=initial_final_day_index_EOBS(year,months[0])
     s2,e2=initial_final_day_index_EOBS(year,months[1])
@@ -131,10 +131,10 @@ for i in range(len(jle.seasons)):
     ds2=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[1],jle.month_names[int(months[1])-1]))
     ds3=Dataset(files_path+'lffd%s%s_%s.nc'%(year,months[2],jle.month_names[int(months[2])-1]))
     
-    if ds.variables['RELHUM_2M'][:].ndim==4:
-        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
+    if ds1.variables['RELHUM_2M'][:].ndim==4:
+        domain_mask=ds1.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
     else:
-        domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0))==0
+        domain_mask=ds1.variables['RELHUM_2M'][:].mean(axis=(0))==0
     
     s1,e1=initial_final_day_index_EOBS(year,months[0])
     s2,e2=initial_final_day_index_EOBS(year,months[1])
