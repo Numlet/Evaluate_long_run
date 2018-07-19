@@ -5,6 +5,7 @@ Created on Thu Jul 12 13:15:34 2018
 
 @author: jvergara
 """
+print('monthly concatenation step')
 
 import sys
 sys.path.append('/users/jvergara/python_code')
