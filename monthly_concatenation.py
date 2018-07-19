@@ -39,6 +39,6 @@ os.chdir(output_path)
 for i in range(12):
     print(jle.months_number_str[i])
     print(jle.month_names[i])
-    os.system('rm lffd%s%s_%s*'%(year,jle.months_number_str[i],jle.month_names[i]))
-    os.system('ncrcat lffd%s%s* lffd%s%s_%s.nc'%(year,jle.months_number_str[i],year,jle.months_number_str[i],jle.month_names[i]))
+    a=os.system('rm lffd%s%s_%s*'%(year,jle.months_number_str[i],jle.month_names[i]))
+    a=os.system('ncrcat lffd%s%s* lffd%s%s_%s.nc'%(year,jle.months_number_str[i],year,jle.months_number_str[i],jle.month_names[i]))
     
