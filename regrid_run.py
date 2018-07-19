@@ -94,7 +94,8 @@ while True:
     
     for file in out_files.keys():
         out=check_file(file)
-        if out !='ok':
+        print(file,out)
+	if out !='ok':
             failed_files.append(out_files[file])
         # print (file)
         # print (out)
