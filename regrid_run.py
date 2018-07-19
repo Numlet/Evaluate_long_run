@@ -105,9 +105,10 @@ while True:
     print (len(failed_files))
     t2=time.time()
     print(t2-t1)
-    files=np.copy(failed_files).tolist()
-    if len(files)==0:
-        break
+    break
+#    files=np.copy(failed_files).tolist()
+#    if len(files)==0:
+#        break
     
 
 
