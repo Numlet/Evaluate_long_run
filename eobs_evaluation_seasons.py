@@ -189,9 +189,9 @@ for i in range(len(jle.seasons)):
     
     plt.figure(figsize=(20,20))
     plt.subplot(221)
-    jle.Quick_plot(eobs_sm,'Temperature EOBS '+year+' '+jle.seasons[i],latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar)
+    jle.Quick_plot(eobs_sm,'Temperature EOBS '+year+' '+jle.seasons[i],latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
     plt.subplot(222)
-    jle.Quick_plot(model_sm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar)
+    jle.Quick_plot(model_sm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
 #    jle.Quick_plot(mean.mean(axis=(0,1)),'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False)
     
     dif_levels=np.linspace(-5,5,11)

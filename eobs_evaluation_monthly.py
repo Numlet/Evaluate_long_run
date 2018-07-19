@@ -129,9 +129,9 @@ for month in jle.months_number_str:
     
     plt.figure(figsize=(20,20))
     plt.subplot(221)
-    jle.Quick_plot(eobs_mm,'Temperature EOBS '+year+' '+month,latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar)
+    jle.Quick_plot(eobs_mm,'Temperature EOBS '+year+' '+month,latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
     plt.subplot(222)
-    jle.Quick_plot(model_mm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar)
+    jle.Quick_plot(model_mm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
     
     dif_levels=np.linspace(-5,5,11)
     dif=model_mm-eobs_mm

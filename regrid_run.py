@@ -58,7 +58,7 @@ def check_file(file,variable='T_2M'):
 
 #%%
 files=glob.glob(run_path+folder_in_path+'lffd%s*nc'%year)
-
+files=np.sort(files)
 #%%
 import time
 import multiprocessing
