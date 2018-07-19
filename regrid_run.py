@@ -92,11 +92,11 @@ while True:
         for job in jobs:
             job.join()
     
-    for file in out_files.keys():
-        out=check_file(file)
-        print(file,out)
-        if out !='ok':
-            failed_files.append(out_files[file])
+    #for file in out_files.keys():
+    #    out=check_file(file)
+    #    print(file,out)
+    #    if out !='ok':
+    #        failed_files.append(out_files[file])
         # print (file)
         # print (out)
     
