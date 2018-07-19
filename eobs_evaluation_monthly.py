@@ -57,7 +57,7 @@ for month in jle.months_number_str:
     print('PRECIPITATION EVALUATION')
     levels=np.linspace(0,9,10)
 
-    ds=Dataset(files_path+'lffd2006%s_%s.nc'%(month,jle.month_names[int(month)-1]))
+    ds=Dataset(files_path+'lffd%s%s_%s.nc'%(year,month,jle.month_names[int(month)-1]))
     
     if ds.variables['RELHUM_2M'][:].ndim==4:
         domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
@@ -107,7 +107,7 @@ for month in jle.months_number_str:
 
     plt.figure(figsize=(20,20))
     
-    ds=Dataset(files_path+'lffd2006%s_%s.nc'%(month,jle.month_names[int(month)-1]))
+    ds=Dataset(files_path+'lffd%s%s_%s.nc'%(year,month,jle.month_names[int(month)-1]))
     
     if ds.variables['RELHUM_2M'][:].ndim==4:
         domain_mask=ds.variables['RELHUM_2M'][:].mean(axis=(0,1))==0
