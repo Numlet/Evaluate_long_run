@@ -75,16 +75,20 @@ for month in jle.months_number_str:
     
     model_mm=ds.variables['TOT_PREC'][:].mean(axis=0)
     model_mm[total_mask]=np.nan
-    
+    ylims=[Y[~total_mask].min(),Y[~total_mask].max()]
+    xlims=[X[~total_mask].min(),X[~total_mask].max()]
     plt.subplot(221)
-    jle.Quick_plot(eobs_mm,'Precipitation EOBS '+year+' '+month,latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(eobs_mm,'Precipitation EOBS '+year+' '+month,latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     plt.subplot(222)
-    jle.Quick_plot(model_mm*24,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(model_mm*24,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     
     dif_levels=jle.from_levels_to_diflevels(levels,fraction=0.5)
     dif=model_mm*24-eobs_mm
     plt.subplot(223)
-    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     data=dif.flatten()
     data=data[~np.isnan(data)]
     plt.subplot(224)
@@ -126,17 +130,21 @@ for month in jle.months_number_str:
     else:
         model_mm=ds.variables['T_2M'][:].mean(axis=(0,1))
     model_mm[total_mask]=np.nan
-    
+    ylims=[Y[~total_mask].min(),Y[~total_mask].max()]
+    xlims=[X[~total_mask].min(),X[~total_mask].max()]
     plt.figure(figsize=(20,20))
     plt.subplot(221)
-    jle.Quick_plot(eobs_mm,'Temperature EOBS '+year+' '+month,latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
+    jle.Quick_plot(eobs_mm,'Temperature EOBS '+year+' '+month,latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     plt.subplot(222)
-    jle.Quick_plot(model_mm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
+    jle.Quick_plot(model_mm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     
     dif_levels=np.linspace(-5,5,11)
     dif=model_mm-eobs_mm
     plt.subplot(223)
-    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu_r,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu_r,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     data=dif.flatten()
     data=data[~np.isnan(data)]
     plt.subplot(224)

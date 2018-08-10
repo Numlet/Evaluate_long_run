@@ -25,14 +25,23 @@ import pickle
 import scipy
 import datetime
 from dateutil.relativedelta import relativedelta
+import pandas as pd
+import matplotlib as mpl
+
+mpl.rcParams['savefig.bbox'] = 'tight'
+mpl.rcParams['font.size'] = 18
+mpl.rcParams['legend.fontsize']= 12
+mpl.rcParams['legend.frameon'] = 'False'
+
 
 
 from define_parameters import pspc_data_folder,year, plots_folder, initial_final_day_index_EOBS, name
 from define_parameters import output_path as files_path
 
 
+columns=['Model_name','Season','Variable','units','r_spatial','mean_error','mean_bias']
 
-
+skills_dataset=pd.DataFrame(columns=columns)
 
 os.chdir(files_path)
 
@@ -48,7 +57,6 @@ for i in range(len(jle.seasons)):
 # =============================================================================
 #   Precipitation
 # =============================================================================
-    plt.figure(figsize=(20,20))
     print('PRECIPITATION EVALUATION')
     levels=np.linspace(0,9,10)
     
@@ -94,23 +102,36 @@ for i in range(len(jle.seasons)):
 
     model_sm=np.concatenate((model_mm1,model_mm2,model_mm3)).mean(axis=0)
     model_sm[total_mask]=np.nan
-    
+    ylims=[Y[~total_mask].min(),Y[~total_mask].max()]
+    xlims=[X[~total_mask].min(),X[~total_mask].max()]
+    plt.figure(figsize=(20,20))
+
     plt.subplot(221)
-    jle.Quick_plot(eobs_sm,'Precipitation EOBS '+year+' '+jle.seasons[i],latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(eobs_sm,'Precipitation EOBS '+year+' '+jle.seasons[i],latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     plt.subplot(222)
-    jle.Quick_plot(model_sm*24,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(model_sm*24,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
     
     dif_levels=jle.from_levels_to_diflevels(levels,fraction=0.5)
     dif=model_sm*24-eobs_sm
     plt.subplot(223)
-    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
+    ax=plt.subplot(224)
     data=dif.flatten()
     data=data[~np.isnan(data)]
-    plt.subplot(224)
+    bias=data.mean()
+    corr=np.corrcoef((model_sm*24)[~total_mask],eobs_sm[~total_mask])[0,1]
+    err=np.abs(data).sum()/len(data)
+    plt.text(0.75, 0.9,'Spatial correlation=%1.2f'%corr, ha='center', va='center', transform=ax.transAxes)
+    plt.text(0.75, 0.85,'Mean error=%1.2f %s'%(err,units), ha='center', va='center', transform=ax.transAxes)
+    plt.text(0.75, 0.8,'Mean bias=%1.2f %s'%(bias,units), ha='center', va='center', transform=ax.transAxes)
+    list_of_skills=[name,jle.seasons[i],'Precipitation',units,corr, err,bias]
+    skills_dataset=skills_dataset.append(pd.DataFrame([list_of_skills],columns=columns))
     plt.hist(data,bins=200)
-    plt.title('Diff histogram. Mean_bias=%1.2f %s'%(data.mean(),units))
-    
-    plt.savefig(plots_folder+name+'_precipitation_evaluation_%s.png'%jle.seasons[i])
+    plt.title('Diff histogram')
+    plt.savefig(plots_folder+'Seasonal_mean_'+name+'_precipitation_evaluation_%s.png'%jle.seasons[i])
     
 #%%
     
@@ -186,22 +207,38 @@ for i in range(len(jle.seasons)):
     
 #    model_mm=ds.variables['T_2M'][:].mean(axis=(0,1))
 #    model_mm[total_mask]=np.nan
-    
+    ylims=[Y[~total_mask].min(),Y[~total_mask].max()]
+    xlims=[X[~total_mask].min(),X[~total_mask].max()]
+
     plt.figure(figsize=(20,20))
     plt.subplot(221)
-    jle.Quick_plot(eobs_sm,'Temperature EOBS '+year+' '+jle.seasons[i],latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
+    jle.Quick_plot(eobs_sm,'Temperature EOBS '+year+' '+jle.seasons[i],latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,
+                   cmap=plt.cm.gist_ncar,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims)
     plt.subplot(222)
-    jle.Quick_plot(model_sm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f')
+    jle.Quick_plot(model_sm,'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False,cmap=plt.cm.gist_ncar,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
 #    jle.Quick_plot(mean.mean(axis=(0,1)),'Model ',latitudes=Y,longitudes=X,levels=levels,cb_label=units,new_fig=False)
     
     dif_levels=np.linspace(-5,5,11)
     dif=model_sm-eobs_sm
     plt.subplot(223)
-    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu_r,cb_label=units,new_fig=False,cb_format='%1.1f')
+    jle.Quick_plot(dif,'Difference model-EOBS ',latitudes=Y,longitudes=X,levels=dif_levels,cmap=plt.cm.RdBu_r,cb_label=units,new_fig=False,cb_format='%1.1f',
+                   lat_bounds=ylims,lon_bounds=xlims)
+    ax=plt.subplot(224)
     data=dif.flatten()
     data=data[~np.isnan(data)]
-    plt.subplot(224)
+    bias=data.mean()
+    corr=np.corrcoef((model_sm)[~total_mask],eobs_sm[~total_mask])[0,1]
+    err=np.abs(data).sum()/len(data)
+    plt.text(0.75, 0.9,'Spatial correlation=%1.2f'%corr, ha='center', va='center', transform=ax.transAxes)
+    plt.text(0.75, 0.85,'Mean error=%1.2f %s'%(err,units), ha='center', va='center', transform=ax.transAxes)
+    plt.text(0.75, 0.8,'Mean bias=%1.2f %s'%(bias,units), ha='center', va='center', transform=ax.transAxes)
+    list_of_skills=[name,jle.seasons[i],'Temperature',units,corr, err,bias]
+    skills_dataset=skills_dataset.append(pd.DataFrame([list_of_skills],columns=columns))
+
     plt.hist(data,bins=200)
-    plt.title('Diff histogram. Mean_bias=%1.2f %s'%(data.mean(),units))
+    plt.title('Diff histogram')
 #    plt.yscale('log')
-    plt.savefig(plots_folder+name+'_temperature_evaluation_%s.png'%jle.seasons[i])
+    plt.savefig(plots_folder+'Seasonal_mean_'+name+'_temperature_evaluation_%s.png'%jle.seasons[i])
+ 
+skills_dataset.to_csv('Skills_Dataframename_'+name,mode = 'w',sep="\t", index=False)

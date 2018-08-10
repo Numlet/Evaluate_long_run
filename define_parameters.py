@@ -5,6 +5,8 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 
+
+
 pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 
 name='0.11_DEEP'
@@ -33,3 +35,11 @@ def initial_final_day_index_EOBS(year,month,n_months=1):
     ds=datetime.datetime(int(year),int(month),1)
     de=ds+relativedelta(months=n_months)
     return (ds-d0).days, (de-d0).days
+
+
+import matplotlib as mpl
+
+mpl.rcParams['savefig.bbox'] = 'tight'
+mpl.rcParams['font.size'] = 20
+mpl.rcParams['legend.fontsize']= 15
+mpl.rcParams['legend.frameon'] = 'False'
