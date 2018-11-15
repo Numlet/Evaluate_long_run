@@ -12,7 +12,7 @@ pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 #name='GA_run'
 
 name='namelist_testing_1'
-run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/namelist_test_v1/lm_f/'
+run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/'+name+'/lm_f/'
 
 #run_path='/project/pr04/davidle/results_clim/lm_c/'
 #run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/0.11_DEEP/lm_c/'

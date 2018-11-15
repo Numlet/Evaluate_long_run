@@ -15,8 +15,6 @@ eobs_precip=Dataset('/store/c2sm/pr04/jvergara/EOBS/rr_0.25deg_reg_v17.0.nc')
 eobs_tmean=Dataset('/store/c2sm/pr04/jvergara/EOBS/tg_0.25deg_reg_v17.0.nc')
 
 
-lw_files=glob.glob(files_folder+'TETmm*')
-sw_files=glob.glob(files_folder+'TRSmm*')
 monthly_mean_precip=[]
 monthly_mean_temperature=[]
 monthly_mask_precip=[]
@@ -30,22 +28,11 @@ for i in range(12):
     monthly_mean_precip.append(eobs_precip.variables['rr'][s:e].mean(axis=0))
     eobs_mask=eobs_precip.variables['rr'][s:e].mean(axis=0).mask
     monthly_mask_precip.append(eobs_mask)
-#    eobs_mm=eobs_precip.variables['rr'][s:e].mean(axis=0)
 
     monthly_mean_temperature.append((eobs_tmean.variables['tg'][s:e]+273.15).mean(axis=0))
     eobs_mask=eobs_tmean.variables['tg'][s:e].mean(axis=0).mask
     monthly_mask_temperature.append(eobs_mask)
 #%%
-#    ds=Dataset(lw_file)
-#    lw_mean=ds.variables['rlut'][0,]
-#    monthly_mean_lw.append(lw_mean)
-    
-#    ds=Dataset(sw_file)
-#    sw_mean_in=ds.variables['rsdt'][0,]
-#    sw_mean_out=ds.variables['rsut'][0,]
-#    monthly_mean_sw_in.append(sw_mean_in)
-#    monthly_mean_sw_out.append(sw_mean_out)
-    
 monthly_mean_temperature=np.array(monthly_mean_temperature)
 monthly_mean_precip=np.array(monthly_mean_precip)
 monthly_mask_temperature=np.array(monthly_mask_temperature)
@@ -58,7 +45,6 @@ temperature_dict={}
 precip_mask_dict={}
 temperature_mask_dict={}
 
-#precip_dict['DJF']=np.mean(monthly_mean_lw[[11,0,1],:,:])
 for i in range(len(jle.seasons)):
     print(jle.seasons[i])
     print(jle.season_indexes[i])
@@ -81,7 +67,6 @@ for season in jle.seasons:
         corr_dict={}
         err_dict={}
         
-    #    for name in path_dict:
         print(name)
         print(season)
         levels=np.linspace(264,320,15).tolist()
@@ -140,7 +125,6 @@ for season in jle.seasons:
         print(name)
         
         levels=np.linspace(0.1,5,15)
-#            levels=np.linspace(264,320,15).tolist()
         ds=Dataset(output_path+'lffd'+year+'_'+season+'_regrided_EOBS.nc')
         model_data=ds.variables['TOT_PREC'][0,]
         sample_nc=Dataset(sample_nc_path)
@@ -205,9 +189,7 @@ for month in jle.months_number_str:
         corr_dict={}
         err_dict={}
         
-    #    for name in path_dict:
         print(name)
-#        print(season)
         levels=np.linspace(264,320,15).tolist()
         ds=Dataset(output_path+'lffd'+year+month+'_regrided_EOBS.nc')
         model_data=ds.variables['T_2M'][0,]
@@ -264,7 +246,6 @@ for month in jle.months_number_str:
         print(name)
         
         levels=np.linspace(0.1,5,15)
-#            levels=np.linspace(264,320,15).tolist()
         ds=Dataset(output_path+'lffd'+year+'_'+month_name+'_regrided_EOBS.nc')
         model_data=ds.variables['TOT_PREC'][0,]
         sample_nc=Dataset(sample_nc_path)
