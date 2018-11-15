@@ -14,8 +14,9 @@ if not a and not b and not c:
     print('SUCCESFULLY! (maybe)')
 
 print('Starting with EOBS')
-#b=os.system('python regrid_run.py EOBS')
+b=os.system('python regrid_run.py EOBS')
 print('Run regrided to EOBS')
+b=os.system('python evaluate_EOBS.py')
 
 #python eobs_evaluation_monthly.py
 #python eobs_evaluation_seasons.py

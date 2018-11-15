@@ -25,12 +25,18 @@ from pympler import summary
 import pickle
 import scipy
 
-from define_parameters import run_path,folder_in_path,output_path,native_grid_file,target_grid_file,year
-
-
-
-
-
+from define_parameters import run_path,folder_in_path,output_path,native_grid_file,target_grid_file,year,grid_eobs,grid_cmsaf
+dataset='arbitrary'
+if len(sys.argv)>1:
+    dataset=sys.argv[1]
+if dataset=='EOBS':
+    target_grid_file=grid_eobs
+    folder_in_path='1h/'
+if dataset=='CMSAF':
+    target_grid_file=grid_cmsaf
+    folder_in_path='1h_second/'
+os.system('rm weights')
+folder_in_path=folder_in_path[:-1]+'_mm/'
 
 def Regrid(file,file_output_with_path,native_grid_file=native_grid_file,target_grid_file=target_grid_file,jump_past_files=0):
     do=1
@@ -48,13 +54,6 @@ def Regrid(file,file_output_with_path,native_grid_file=native_grid_file,target_g
         os.system('rm -f %s'%(file_name_output_no_vcoord))
         return a
 
-def check_file(file,variable='T_2M'):
-    ds=Dataset(file)
-    array=ds.variables[variable][:]
-    if np.array(array.data==0).sum()/array.size == 1:
-        return file
-    else:
-        return 'ok'
 
 #%%
 files=glob.glob(run_path+folder_in_path+'lffd%s*nc'%year)
@@ -68,19 +67,18 @@ import multiprocessing
 
 while True:   
     t1=time.time()
-    processes=4
+    processes=1
     output=output_path
     list_of_chunks=np.array_split(files,len(files)/processes+1)
     start=time.time()
     
-    failed_files=[]
     out_files={}
     for chunk in list_of_chunks:
         jobs=[]
         for file in chunk:
             print(file)
             file_name=file.split('/')[-1]
-            file_name_output=file_name[:-3]+'_regrided_eobs.nc'
+            file_name_output=file_name[:-3]+'_regrided_'+dataset+'.nc'
             file_output_with_path=output+file_name_output
             out_files[file_output_with_path]=file
 #            print(output+file_name_output)
@@ -92,23 +90,11 @@ while True:
         for job in jobs:
             job.join()
     
-    #for file in out_files.keys():
-    #    out=check_file(file)
-    #    print(file,out)
-    #    if out !='ok':
-    #        failed_files.append(out_files[file])
-        # print (file)
-        # print (out)
     
-#    failed_files=[f for f in failed_files if f !='ok']
     
-    print (len(failed_files))
     t2=time.time()
     print(t2-t1)
     break
-#    files=np.copy(failed_files).tolist()
-#    if len(files)==0:
-#        break
     
 
 
