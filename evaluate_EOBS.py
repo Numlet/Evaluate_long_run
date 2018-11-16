@@ -93,12 +93,12 @@ for season in jle.seasons:
         
         plt.figure(figsize=(20,20))
         plt.subplot(222)        
-        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims)
+        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         model_data.data[model_data.mask]=np.nan
         
         plt.subplot(221)        
         jle.Quick_plot(temperature_dict[season],'Temperature EOBS '+year+' '+season,latitudes=Y,longitudes=X,
-                       levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims)
+                       levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         diff=model_data-temperature_dict[season]
         
         plt.subplot(223)
@@ -214,12 +214,12 @@ for month in jle.months_number_str:
         
         plt.figure(figsize=(20,20))
         plt.subplot(222)        
-        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims)
+        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         model_data.data[model_data.mask]=np.nan
         
         plt.subplot(221)        
         jle.Quick_plot(monthly_mean_temperature[imonth],'Temperature EOBS '+year+' '+month_name,latitudes=Y,longitudes=X,
-                       levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims)
+                       levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         diff=model_data-monthly_mean_temperature[imonth]
         
         plt.subplot(223)
