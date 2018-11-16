@@ -22,7 +22,7 @@ monthly_mask_temperature=[]
 
 for i in range(12):
     print (i)
-    month=jle.months_number_str[1]
+    month=jle.months_number_str[i]
 
     s,e=initial_final_day_index_EOBS(year,month)
     monthly_mean_precip.append(eobs_precip.variables['rr'][s:e].mean(axis=0))
