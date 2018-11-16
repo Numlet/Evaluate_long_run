@@ -102,7 +102,7 @@ for season in jle.seasons:
         diff=model_data-temperature_dict[season]
         
         plt.subplot(223)
-        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-12,12,16),
+        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-5,5,16),
                        cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f')
         plt.subplot(224)
         values=diff[~np.isnan(model_data)]
@@ -223,7 +223,7 @@ for month in jle.months_number_str:
         diff=model_data-monthly_mean_temperature[imonth]
         
         plt.subplot(223)
-        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-12,12,16),
+        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-5,5,16),
                        cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f')
         plt.subplot(224)
         values=diff[~np.isnan(model_data)]
@@ -246,7 +246,7 @@ for month in jle.months_number_str:
         print(name)
         
         levels=np.linspace(0.1,5,15)
-        ds=Dataset(output_path+'lffd'+year+'_'+month_name+'_regrided_EOBS.nc')
+        ds=Dataset(output_path+'lffd'+year+month+'_regrided_EOBS.nc')
         model_data=ds.variables['TOT_PREC'][0,]
         sample_nc=Dataset(sample_nc_path)
         lat_bounds=[sample_nc.variables['lat'][:].min(),sample_nc.variables['lat'][:].max()]

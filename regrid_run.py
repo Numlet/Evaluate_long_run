@@ -58,6 +58,8 @@ def Regrid(file,file_output_with_path,native_grid_file=native_grid_file,target_g
 #%%
 files=glob.glob(run_path+folder_in_path+'lffd%s*nc'%year)
 files=np.sort(files)
+print('\n\nFiles found to regrid:\n\n')
+print(files)
 #%%
 import time
 import multiprocessing
@@ -82,7 +84,7 @@ while True:
             file_output_with_path=output+file_name_output
             out_files[file_output_with_path]=file
 #            print(output+file_name_output)
-            keywords={'jump_past_files':1}
+            keywords={'jump_past_files':0}
             p = multiprocessing.Process(target=Regrid, args=(file,file_output_with_path),kwargs=keywords)
             print (file,p)
             jobs.append(p)
