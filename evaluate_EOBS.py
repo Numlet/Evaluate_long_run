@@ -15,6 +15,11 @@ eobs_precip=Dataset('/store/c2sm/pr04/jvergara/EOBS/rr_0.25deg_reg_v17.0.nc')
 eobs_tmean=Dataset('/store/c2sm/pr04/jvergara/EOBS/tg_0.25deg_reg_v17.0.nc')
 
 
+temp_levels=np.linspace(264,320,15).tolist()
+temp_diff_levels=np.linspace(-4,4,16).tolist()
+precip_levels=np.linspace(0.1,6,15)
+precip_diff_levels=np.linspace(-4,4,16).tolist()
+
 monthly_mean_precip=[]
 monthly_mean_temperature=[]
 monthly_mask_precip=[]
@@ -69,7 +74,7 @@ for season in jle.seasons:
         
         print(name)
         print(season)
-        levels=np.linspace(264,320,15).tolist()
+        levels=temp_levels
         ds=Dataset(output_path+'lffd'+year+'_'+season+'_regrided_EOBS.nc')
         model_data=ds.variables['T_2M'][0,]
         sample_nc=Dataset(sample_nc_path)
@@ -92,25 +97,31 @@ for season in jle.seasons:
 
         
         plt.figure(figsize=(20,20))
-        plt.subplot(222)        
-        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
+        plt.subplot(221)        
+        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=temp_levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         model_data.data[model_data.mask]=np.nan
         
-        plt.subplot(221)        
+        plt.subplot(222)        
         jle.Quick_plot(temperature_dict[season],'Temperature EOBS '+year+' '+season,latitudes=Y,longitudes=X,
-                       levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
+                       levels=temp_levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         diff=model_data-temperature_dict[season]
         
         plt.subplot(223)
-        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-5,5,16),
-                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f')
+        jle.Quick_plot(diff ,'diff mean %1.3f'%(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=temp_diff_levels,
+                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K')
         plt.subplot(224)
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
         plt.axvline(0,c='k',ls='--')
 
-        plt.xlabel('bias W/m2')
-        corr,bias,error=jle.Calculate_skills(model_data,temperature_dict[season])
+        plt.xlabel('bias K')
+        
+        units='K'
+        corr,bias,error=jle.Calculate_skills(model_data[~np.isnan(model_data)],temperature_dict[season][~np.isnan(model_data)])
+
+        plt.text(0.75, 0.9,'Spatial correlation=%1.2f'%corr, ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.85,'Mean error=%1.2f %s'%(error,units), ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.8,'Mean bias=%1.2f %s'%(bias,units), ha='center', va='center', transform=ax.transAxes)
         
         err_dict[name]=error
         bias_dict[name]=bias
@@ -121,10 +132,9 @@ for season in jle.seasons:
 # =============================================================================
 #         PRECIPITATION
 # =============================================================================
-        #%%
         print(name)
         
-        levels=np.linspace(0.1,5,15)
+#        levels=np.linspace(0.1,5,15)
         ds=Dataset(output_path+'lffd'+year+'_'+season+'_regrided_EOBS.nc')
         model_data=ds.variables['TOT_PREC'][0,]
         sample_nc=Dataset(sample_nc_path)
@@ -147,32 +157,37 @@ for season in jle.seasons:
 
         
         plt.figure(figsize=(20,20))
-        plt.subplot(222)        
-        jle.Quick_plot(model_data*24,name,latitudes=Y,longitudes=X,levels=levels,cb_label='mm',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims)
+        plt.subplot(221)        
+        jle.Quick_plot(model_data*24,name,latitudes=Y,longitudes=X,levels=precip_levels,cb_label='mm/day',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,extend='max')
         model_data.data[model_data.mask]=np.nan
         
-        plt.subplot(221)        
-        jle.Quick_plot(precip_dict[season],'Precipitation EOBS '+year+' '+season,latitudes=Y,longitudes=X,levels=levels,cb_label='mm',
+        plt.subplot(222)        
+        jle.Quick_plot(precip_dict[season],'Precipitation EOBS '+year+' '+season,latitudes=Y,longitudes=X,levels=precip_levels,cb_label='mm/day',
                        new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,extend='max')
         diff=model_data*24-precip_dict[season]
         
         plt.subplot(223)
-        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-4,4,16),
-                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f')
-        plt.subplot(224)
+        jle.Quick_plot(diff ,'diff mean %1.3f'%(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=precip_diff_levels,
+                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f',cb_label='mm/day')
+        ax=plt.subplot(224)
+        units= 'mm/day'
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
         plt.axvline(0,c='k',ls='--')
 
-        plt.xlabel('bias W/m2')
-        corr,bias,error=jle.Calculate_skills(model_data,precip_dict[season])
+        plt.xlabel('bias mm/day')
+#        corr,bias,error=jle.Calculate_skills(model_data,precip_dict[season])
+        corr,bias,error=jle.Calculate_skills(model_data[~np.isnan(model_data)]*24,precip_dict[seaon][~np.isnan(model_data)])
+
+        plt.text(0.75, 0.9,'Spatial correlation=%1.2f'%corr, ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.85,'Mean error=%1.2f %s'%(error,units), ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.8,'Mean bias=%1.2f %s'%(bias,units), ha='center', va='center', transform=ax.transAxes)
         
         err_dict[name]=error
         bias_dict[name]=bias
         corr_dict[name]=corr**2
     
         plt.savefig(plots_folder+'Precipitation_biases_EOBS_'+name+'_'+season+'.png')
-        #%%
     except:
         print(season +' could not be evaluated')
 #%%
@@ -213,25 +228,31 @@ for month in jle.months_number_str:
 
         
         plt.figure(figsize=(20,20))
-        plt.subplot(222)        
-        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
+        plt.subplot(221)        
+        jle.Quick_plot(model_data,name,latitudes=Y,longitudes=X,levels=temp_levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         model_data.data[model_data.mask]=np.nan
         
-        plt.subplot(221)        
+        plt.subplot(222)        
         jle.Quick_plot(monthly_mean_temperature[imonth],'Temperature EOBS '+year+' '+month_name,latitudes=Y,longitudes=X,
-                       levels=levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
+                       levels=temp_levels,cb_label='K',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,cmap=plt.cm.gist_ncar)
         diff=model_data-monthly_mean_temperature[imonth]
         
         plt.subplot(223)
-        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-5,5,16),
-                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f')
-        plt.subplot(224)
+        jle.Quick_plot(diff ,'diff mean %1.3f'%(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=temp_diff_levels,
+                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K')
+        ax=plt.subplot(224)
+        units='K'
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
         plt.axvline(0,c='k',ls='--')
 
-        plt.xlabel('bias W/m2')
-        corr,bias,error=jle.Calculate_skills(model_data,monthly_mean_temperature[imonth])
+        plt.xlabel('bias K')
+#        corr,bias,error=jle.Calculate_skills(model_data,monthly_mean_temperature[imonth])
+        corr,bias,error=jle.Calculate_skills(model_data[~np.isnan(model_data)],monthly_mean_temperature[imonth][~np.isnan(model_data)])
+
+        plt.text(0.75, 0.9,'Spatial correlation=%1.2f'%corr, ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.85,'Mean error=%1.2f %s'%(error,units), ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.8,'Mean bias=%1.2f %s'%(bias,units), ha='center', va='center', transform=ax.transAxes)
         
         err_dict[name]=error
         bias_dict[name]=bias
@@ -242,7 +263,6 @@ for month in jle.months_number_str:
 # =============================================================================
 #         PRECIPITATION
 # =============================================================================
-        #%%
         print(name)
         
         levels=np.linspace(0.1,5,15)
@@ -266,27 +286,33 @@ for month in jle.months_number_str:
         ylims=[Y[~total_mask].min(),Y[~total_mask].max()]
         xlims=[X[~total_mask].min(),X[~total_mask].max()]
 
-        
+        units='mm/day'
         plt.figure(figsize=(20,20))
-        plt.subplot(222)        
-        jle.Quick_plot(model_data*24,name,latitudes=Y,longitudes=X,levels=levels,cb_label='mm',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims)
+        plt.subplot(221)        
+        jle.Quick_plot(model_data*24,name,latitudes=Y,longitudes=X,levels=precip_levels,cb_label='mm/day',new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,extend='max')
         model_data.data[model_data.mask]=np.nan
         
-        plt.subplot(221)        
-        jle.Quick_plot(monthly_mean_precip[imonth],'Precipitation EOBS '+year+' '+month_name,latitudes=Y,longitudes=X,levels=levels,cb_label='mm',
+        plt.subplot(222)        
+        jle.Quick_plot(monthly_mean_precip[imonth],'Precipitation EOBS '+year+' '+month_name,latitudes=Y,longitudes=X,levels=precip_levels,cb_label='mm/day',
                        new_fig=False,cb_format='%1.1f',lat_bounds=ylims,lon_bounds=xlims,extend='max')
         diff=model_data*24-monthly_mean_precip[imonth]
         
         plt.subplot(223)
-        jle.Quick_plot(diff ,'diff mean '+str(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=np.linspace(-4,4,16),
-                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f')
-        plt.subplot(224)
+        jle.Quick_plot(diff ,'diff mean %1.3f'%(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=precip_diff_levels,
+                       cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f',cb_label='mm/day')
+        ax=plt.subplot(224)
         values=diff[~np.isnan(model_data)]
+#        bias=values.mean()
+#        corr=np.corrcoef((model_sm*24),monthly_mean_precip[imonth])[0,1]
+#        err=np.abs(values).sum()/len(values)
         plt.hist(values,bins=100,normed=1)
         plt.axvline(0,c='k',ls='--')
 
-        plt.xlabel('bias W/m2')
-        corr,bias,error=jle.Calculate_skills(model_data,monthly_mean_precip[imonth])
+        plt.xlabel('bias mm/day')
+        corr,bias,error=jle.Calculate_skills(model_data[~np.isnan(model_data)]*24,monthly_mean_precip[imonth][~np.isnan(model_data)])
+        plt.text(0.75, 0.9,'Spatial correlation=%1.2f'%corr, ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.85,'Mean error=%1.2f %s'%(error,units), ha='center', va='center', transform=ax.transAxes)
+        plt.text(0.75, 0.8,'Mean bias=%1.2f %s'%(bias,units), ha='center', va='center', transform=ax.transAxes)
         
         err_dict[name]=error
         bias_dict[name]=bias
@@ -298,4 +324,24 @@ for month in jle.months_number_str:
     except:
         imonth=int(month)-1
         print(jle.month_names[imonth] +' could not be evaluated')
-        
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
