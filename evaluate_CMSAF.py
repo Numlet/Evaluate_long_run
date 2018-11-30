@@ -86,7 +86,7 @@ for season in jle.seasons:
         ax=plt.subplot(224)
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
-        plt.axvline(0,c='b',ls='--')
+        plt.axvline(0,c='k',ls='--')
 
         plt.xlabel('bias W/m2')
         corr,bias,error=jle.Calculate_skills(model_data,lw_dict[season])
@@ -122,7 +122,7 @@ for season in jle.seasons:
         ax=plt.subplot(224)
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
-        plt.axvline(0,c='b',ls='--')
+        plt.axvline(0,c='k',ls='--')
 
         plt.xlabel('bias W/m2')
         corr,bias,error=jle.Calculate_skills(model_data,sw_net_dict[season])
@@ -170,7 +170,7 @@ for month in jle.months_number_str:
         ax=plt.subplot(224)
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
-        plt.axvline(0,c='b',ls='--')
+        plt.axvline(0,c='k',ls='--')
 
         plt.xlabel('bias W/m2')
         corr,bias,error=jle.Calculate_skills(model_data,monthly_mean_lw[imonth,])
@@ -206,7 +206,7 @@ for month in jle.months_number_str:
         ax=plt.subplot(224)
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
-        plt.axvline(0,c='b',ls='--')
+        plt.axvline(0,c='k',ls='--')
 
         plt.xlabel('bias W/m2')
         corr,bias,error=jle.Calculate_skills(model_data,monthly_mean_sw[imonth,])
