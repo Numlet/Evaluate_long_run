@@ -11,9 +11,12 @@ pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 
 #name='GA_fine_spinup_and_evaluation'
 
+
+#######MODIFY THIS PART#############
 name='namelist_test_v1'
 run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/'+name+'/lm_f/'
 
+year='2000'
 #run_path='/project/pr04/davidle/results_clim/lm_c/'
 #run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/0.11_DEEP/lm_c/'
 #run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/GA_fine_spinup_and_evaluation/lm_f/'
@@ -34,8 +37,7 @@ mask_relaxation_zone=np.load('/store/c2sm/pr04/jvergara/CONV_ON_OFF/eobs_mask_re
 sample_nc_path=glob.glob(run_path+'1h/'+'*')[0]
 
 apply_rz_mask=0
-year='2000'
-
+#############UNTIL HERE################
 plots_folder='/users/jvergara/evaluation_CMSAF/'+name+'/'
 
 jle.Create_folder(plots_folder)
