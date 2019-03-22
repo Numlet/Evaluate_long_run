@@ -182,7 +182,7 @@ for season in jle.seasons:
 
         plt.xlabel('bias mm/day')
 #        corr,bias,error=jle.Calculate_skills(model_data,precip_dict[season])
-        corr,bias,error=jle.Calculate_skills(model_data[~np.isnan(model_data)]*24,precip_dict[seaon][~np.isnan(model_data)])
+        corr,bias,error=jle.Calculate_skills(model_data[~np.isnan(model_data)]*24,precip_dict[season][~np.isnan(model_data)])
 
         plt.text(0.75, 0.9,'Spatial correlation=%1.2f'%corr, ha='center', va='center', transform=ax.transAxes)
         plt.text(0.75, 0.85,'Mean error=%1.2f %s'%(error,units), ha='center', va='center', transform=ax.transAxes)
