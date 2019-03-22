@@ -1,3 +1,5 @@
+import matplotlib 
+matplotlib.use("Agg")
 from define_parameters import *
 import glob
 from netCDF4 import Dataset
@@ -109,7 +111,7 @@ for season in jle.seasons:
         plt.subplot(223)
         jle.Quick_plot(diff ,'diff mean %1.3f'%(np.nanmean(diff)),latitudes=Y,longitudes=X,levels=temp_diff_levels,
                        cmap=plt.cm.RdBu,lat_bounds=ylims,lon_bounds=xlims,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K')
-        plt.subplot(224)
+        ax=plt.subplot(224)
         values=diff[~np.isnan(model_data)]
         plt.hist(values,bins=100,normed=1)
         plt.axvline(0,c='k',ls='--')
@@ -136,7 +138,10 @@ for season in jle.seasons:
         
 #        levels=np.linspace(0.1,5,15)
         ds=Dataset(output_path+'lffd'+year+'_'+season+'_regrided_EOBS.nc')
-        model_data=ds.variables['TOT_PREC'][0,]
+        try:
+            model_data=ds.variables['TOT_PREC'][0,]
+        except:
+            model_data=ds.variables['TOT_PR'][0,]*3600
         sample_nc=Dataset(sample_nc_path)
         lat_bounds=[sample_nc.variables['lat'][:].min(),sample_nc.variables['lat'][:].max()]
         lon_bounds=[sample_nc.variables['lon'][:].min(),sample_nc.variables['lon'][:].max()]
@@ -267,7 +272,11 @@ for month in jle.months_number_str:
         
         levels=np.linspace(0.1,5,15)
         ds=Dataset(output_path+'lffd'+year+month+'_regrided_EOBS.nc')
-        model_data=ds.variables['TOT_PREC'][0,]
+        try:
+            model_data=ds.variables['TOT_PREC'][0,]
+        except:
+            model_data=ds.variables['TOT_PR'][0,]*3600
+        #model_data=ds.variables['TOT_PREC'][0,]
         sample_nc=Dataset(sample_nc_path)
         lat_bounds=[sample_nc.variables['lat'][:].min(),sample_nc.variables['lat'][:].max()]
         lon_bounds=[sample_nc.variables['lon'][:].min(),sample_nc.variables['lon'][:].max()]
