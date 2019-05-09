@@ -25,8 +25,8 @@ from pympler import summary
 import pickle
 import scipy
 
-from define_parameters import run_path,folder_in_path,output_path,native_grid_file,target_grid_file,year,grid_eobs,grid_cmsaf
-dataset='arbitrary'
+from define_parameters import run_path,folder_in_path,output_path,native_grid_file,target_grid_file,years,grid_eobs,grid_cmsaf,grid_meteoswiss_1k
+dataset='CMSAF'
 if len(sys.argv)>1:
     dataset=sys.argv[1]
 if dataset=='EOBS':
@@ -35,6 +35,9 @@ if dataset=='EOBS':
 if dataset=='CMSAF':
     target_grid_file=grid_cmsaf
     folder_in_path='1h_second/'
+if dataset=='meteoswiss_1k':
+    target_grid_file=grid_meteoswiss_1k
+    folder_in_path='1h/'
 os.system('rm weights')
 folder_in_path=folder_in_path[:-1]+'_mm/'
 
@@ -56,7 +59,7 @@ def Regrid(file,file_output_with_path,native_grid_file=native_grid_file,target_g
 
 
 #%%
-files=glob.glob(run_path+folder_in_path+'lffd%s*nc'%year)
+files=glob.glob(run_path+folder_in_path+'lffd*nc')
 files=np.sort(files)
 print('\n\nFiles found to regrid:\n\n')
 print(files)

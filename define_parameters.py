@@ -13,32 +13,31 @@ pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 
 
 #######MODIFY THIS PART#############
-name='namelist_test_v1'
+name='GA_fine_ERA'
 run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/'+name+'/lm_f/'
 
-year='2000'
-#run_path='/project/pr04/davidle/results_clim/lm_c/'
-#run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/0.11_DEEP/lm_c/'
-#run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/GA_fine_spinup_and_evaluation/lm_f/'
+years=['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009']
+
+
 folder_in_path='1h_second/'
 output_path='/store/c2sm/pr04/jvergara/CMSAF_evaluation/'+name+'/'
 jle.Create_folder(output_path)
 
-native_grid_file=pspc_data_folder+'CLM_lm_c_grid.txt'
-native_grid_file=pspc_data_folder+'CLM_lm_0.11_conv_on_off.txt'
 native_grid_file=pspc_data_folder+'CLM_lm_f_GA.txt'
-native_grid_file=pspc_data_folder+'CLM_lm_f_grid_correct.txt'
-target_grid_file=pspc_data_folder+'Satellite_CMSAF_grid.txt'
+
 grid_cmsaf=pspc_data_folder+'Satellite_CMSAF_grid.txt'
+
 grid_eobs=pspc_data_folder+'e-obs_rr_9_grid.txt'
+target_grid_file=pspc_data_folder+'e-obs_rr_9_grid.txt'
+
+grid_meteoswiss_1k='/store/c2sm/pr04/jvergara/RdisaggH_grid.txt'
 
 mask_relaxation_zone=np.load('/store/c2sm/pr04/jvergara/CONV_ON_OFF/eobs_mask_relaxation_zone.npy')
 
-sample_nc_path=glob.glob(run_path+'1h/'+'*')[0]
 
 apply_rz_mask=0
 #############UNTIL HERE################
-plots_folder='/users/jvergara/evaluation_CMSAF/'+name+'/'
+plots_folder='/users/jvergara/long_runs_evaluation/'+name+'/'
 
 jle.Create_folder(plots_folder)
 

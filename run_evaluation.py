@@ -1,7 +1,7 @@
 import os
 from define_parameters import *
 
-a=os.system('python /users/jvergara/python_code/Calculate_monthly_means/run_monthly_means.py %s %s '%(run_path, year))
+a=os.system('python run_monthly_means.py')
 print('Monthly means created')
 
 
