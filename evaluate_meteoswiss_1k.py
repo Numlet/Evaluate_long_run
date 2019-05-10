@@ -33,7 +33,7 @@ model_temps=np.zeros(arrays_shape)
 obs_prec=np.zeros(arrays_shape)
 model_prec=np.zeros(arrays_shape)
 
-
+swiss_mask=np.load('/store/c2sm/pr04/jvergara/CONV_ON_OFF/swiss_mask.npy')
 
 data_path='/store/c2sm/pr04/jvergara/meteoswiss_data/grid/season_means/'
 season=jle.seasons[0]
@@ -44,6 +44,7 @@ for iseason in range(4):
 #         TEMPERATURE
 # =============================================================================
     for iyear in range(n_years):
+        year=years[iyear]
         ds=Dataset(files_path+'lffd'+year+'_'+season+'_regrided_meteoswiss_1k.nc')
         model_data=ds.variables['T_2M'][0,]
         model_temps[iseason,iyear,:,:]=model_data
@@ -67,14 +68,13 @@ for iseason in range(4):
 
 
 bias_temp=model_temps-obs_temps
-#bias_prec[]
-
+bias_temp[:,:,swiss_mask]=np.nan
 bias_temp_annual_mean=np.nanmean(bias_temp,axis=1)
 
 
 #%%
-bias_prec=model_prec-eobs_prec
-#bias_prec[]
+bias_prec=model_prec-obs_prec
+bias_prec[:,:,swiss_mask]=np.nan
 bias_prec_annual_mean=np.nanmean(bias_prec,axis=1)
 
 #%%
@@ -85,7 +85,7 @@ X=sample_nc.variables['lon'][:]
 Y=sample_nc.variables['lat'][:]
 
 
-sample_nc=Dataset(run_path+'1h/lffd20060613120000.nc')
+#sample_nc=Dataset(run_path+'1h/lffd20060613120000.nc')
 lat_bounds=[sample_nc.variables['lat'][:].min(),sample_nc.variables['lat'][:].max()]
 lon_bounds=[sample_nc.variables['lon'][:].min(),sample_nc.variables['lon'][:].max()]
 
