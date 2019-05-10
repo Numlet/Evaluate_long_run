@@ -13,17 +13,18 @@ pspc_data_folder='/store/c2sm/pr04/jvergara/postprocessing_data/'
 
 
 #######MODIFY THIS PART#############
-name='GA_fine_ERA'
-run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/'+name+'/lm_f/'
-
-years=['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009']
+name='Leutwyler2017'
+original_files='/project/pr04/davidle/results_clim/lm_f/'
+run_path='/store/c2sm/pr04/jvergara/RUNS_IN_SCRATCH/'+name+'/'
+jle.Create_folder(run_path)
+years=['2000','2001','2002','2003','2004','2005','2006']#,'2007','2008']
 
 
 folder_in_path='1h_second/'
 output_path='/store/c2sm/pr04/jvergara/CMSAF_evaluation/'+name+'/'
 jle.Create_folder(output_path)
 
-native_grid_file=pspc_data_folder+'CLM_lm_f_GA.txt'
+native_grid_file=pspc_data_folder+'CLM_lm_f_grid_correct.txt'
 
 grid_cmsaf=pspc_data_folder+'Satellite_CMSAF_grid.txt'
 
