@@ -68,14 +68,29 @@ for iseason in range(4):
 
 
 bias_temp=model_temps-obs_temps
+
+model_temp_annual_std=np.std(model_temps,axis=1)
+obs_temp_annual_std=np.std(obs_temps,axis=1)
+#model_temp_annual_std[:,swiss_mask]=np.nan
+obs_temp_annual_std[:,swiss_mask]=np.nan
 bias_temp[:,:,swiss_mask]=np.nan
+#bias_prec[]
+
 bias_temp_annual_mean=np.nanmean(bias_temp,axis=1)
 
 
 #%%
 bias_prec=model_prec-obs_prec
+
+model_prec_annual_std=np.std(model_prec,axis=1)
+obs_prec_annual_std=np.std(obs_prec,axis=1)
+#model_prec_annual_std[:,swiss_mask]=np.nan
+obs_prec_annual_std[:,swiss_mask]=np.nan
+
 bias_prec[:,:,swiss_mask]=np.nan
+#bias_prec[]
 bias_prec_annual_mean=np.nanmean(bias_prec,axis=1)
+bias_prec_annual_std=np.std(bias_prec,axis=1)
 
 #%%
 
@@ -85,7 +100,6 @@ X=sample_nc.variables['lon'][:]
 Y=sample_nc.variables['lat'][:]
 
 
-#sample_nc=Dataset(run_path+'1h/lffd20060613120000.nc')
 lat_bounds=[sample_nc.variables['lat'][:].min(),sample_nc.variables['lat'][:].max()]
 lon_bounds=[sample_nc.variables['lon'][:].min(),sample_nc.variables['lon'][:].max()]
 
@@ -104,7 +118,7 @@ for iseason in range(4):
     jle.Quick_plot(bias_temp_annual_mean[iseason] ,ini_year+'-'+end_year+' '+season+' MB %1.3f K'%(np.nanmean(bias_temp_annual_mean[iseason])),
                    levels=temp_diff_levels,latitudes=Y,longitudes=X,
                    cmap=plt.cm.RdBu_r,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K',lat_bounds=lat_bounds,lon_bounds=lon_bounds,projection='rot_pol')
-plt.savefig(plots_folder+'High_res_seasonal_temperature_biases_'+name+'.png')
+plt.savefig(plots_folder+'High_res_seasonal_temperature_biases_'+name+'.png',dpi=300)
 #%%
 plt.figure(figsize=(18,14))
 for iseason in range(4):
@@ -120,6 +134,82 @@ for iseason in range(4):
                    cmap=plt.cm.RdBu,extend=1,new_fig=0,cb_format='%1.2f',cb_label='mm/day',lat_bounds=lat_bounds,lon_bounds=lon_bounds,projection='rot_pol')
 
 plt.savefig(plots_folder+'High_res_seasonal_precipitation_biases_'+name+'.png')
+#%%
 
 
+levels_std=np.linspace(0.5,1.5,10)
+# =============================================================================
+# STD model
+# =============================================================================
+plt.figure(figsize=(18,14))
+for iseason in range(4):
+    season=jle.seasons[iseason]
+    print(season)
+    iplot=iseason+1
+    plt.subplot(2,2,iplot)
+    plt.title(season)
+
+
+    jle.Quick_plot(model_temp_annual_std[iseason] ,ini_year+'-'+end_year+' '+season+' Mean STD %1.3f K'%(np.nanmean(model_temp_annual_std[iseason])),
+                   levels=levels_std,latitudes=Y,longitudes=X,
+                   cmap=plt.cm.OrRd,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K',lat_bounds=lat_bounds,lon_bounds=lon_bounds,projection='rot_pol')
+plt.savefig(plots_folder+'High_res_seasonal_temperature_std_'+name+'.png',dpi=300)
+
+
+#%%
+levels_std=np.linspace(0.5,2.5,10)
+plt.figure(figsize=(18,14))
+for iseason in range(4):
+    season=jle.seasons[iseason]
+    print(season)
+    iplot=iseason+1
+    plt.subplot(2,2,iplot)
+    plt.title(season)
+
+
+    jle.Quick_plot(model_prec_annual_std[iseason] ,ini_year+'-'+end_year+' '+season+' Mean STD %1.3f K'%(np.nanmean(model_prec_annual_std[iseason])),
+                   levels=levels_std,latitudes=Y,longitudes=X,
+                   cmap=plt.cm.Blues,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K',lat_bounds=lat_bounds,lon_bounds=lon_bounds,projection='rot_pol')
+plt.savefig(plots_folder+'High_res_seasonal_precipitation_std_'+name+'.png')
+
+
+# =============================================================================
+# STD obs
+# =============================================================================
+#%%
+
+levels_std=np.linspace(0.5,1.5,10)
+# =============================================================================
+# STD model
+# =============================================================================
+plt.figure(figsize=(18,14))
+for iseason in range(4):
+    season=jle.seasons[iseason]
+    print(season)
+    iplot=iseason+1
+    plt.subplot(2,2,iplot)
+    plt.title(season)
+
+
+    jle.Quick_plot(obs_temp_annual_std[iseason] ,ini_year+'-'+end_year+' '+season+' Mean STD %1.3f K'%(np.nanmean(model_temp_annual_std[iseason])),
+                   levels=levels_std,latitudes=Y,longitudes=X,
+                   cmap=plt.cm.OrRd,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K',lat_bounds=lat_bounds,lon_bounds=lon_bounds,projection='rot_pol')
+plt.savefig(plots_folder+'High_res_seasonal_temperature_std_OBS.png',dpi=300)
+
+
+#%%
+levels_std=np.linspace(0.5,2.5,10)
+plt.figure(figsize=(18,14))
+for iseason in range(4):
+    season=jle.seasons[iseason]
+    print(season)
+    iplot=iseason+1
+    plt.subplot(2,2,iplot)
+    plt.title(season)
+
+
+    jle.Quick_plot(obs_prec_annual_std[iseason] ,ini_year+'-'+end_year+' '+season+' Mean STD %1.3f K'%(np.nanmean(model_prec_annual_std[iseason])),
+                   levels=levels_std,latitudes=Y,longitudes=X,
+                   cmap=plt.cm.Blues,extend=1,new_fig=0,cb_format='%1.2f',cb_label='K',lat_bounds=lat_bounds,lon_bounds=lon_bounds,projection='rot_pol')
+plt.savefig(plots_folder+'High_res_seasonal_precipitation_std_OBS.png')
 
